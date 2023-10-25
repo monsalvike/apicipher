@@ -1,0 +1,8 @@
+@encriptapi_HostAddress = http://localhost:5091
+
+POST {{encriptapi_HostAddress}}/encrypt/
+Accept: application/json
+
+POST {{encriptapi_HostAddress}}/decrypt/
+Accept: application/json
+###
