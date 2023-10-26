@@ -88,3 +88,5 @@ jobs:
         with:
           target: 'https://apicifradocicdeafit-noprod.azurewebsites.net/'
           fail_action: false
+          allow_issue_writing: false
+          cmd_options: '-a'
