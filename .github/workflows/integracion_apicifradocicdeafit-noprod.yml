@@ -81,18 +81,8 @@ jobs:
           package: .
   dast:
     runs-on: ubuntu-latest
-    needs: deploy
     steps:
-    - name: Checkout del código
-      uses: actions/checkout@v2
-
-    - name: Instalar OWASP ZAP
-      run: |
-        curl -s https://raw.githubusercontent.com/zaproxy/zaproxy/develop/docker/docker-compose.yaml -o docker-compose.yaml
-        docker-compose up -d
-
-    - name: Ejecutar escaneo DAST
-      run: |
-       docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-weekly zap-full-scan.py -t https://apicifradocicdeafit-noprod.azurewebsites.net/encrypt
-
-    
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.7.0
+        with:
+          target: 'https://www.zaproxy.org/'
