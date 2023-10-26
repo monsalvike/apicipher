@@ -8,7 +8,10 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+    inputs:
+      deploy:
+        description: 'Iniciar implementación en producción'
+        required: true
 jobs:
   build:
     runs-on: windows-latest
