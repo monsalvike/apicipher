@@ -39,6 +39,7 @@ namespace Encript
         /// 
         public static string DesEncriptarBase64(this string _cadenaAdesencriptar)
         {
+            //Esto es un comentario de prueba
             string result = string.Empty;
             byte[] decryted = Convert.FromBase64String(_cadenaAdesencriptar);
             //result = System.Text.Encoding.Unicode.GetString(decryted, 0, decryted.ToArray().Length);
