@@ -1,0 +1,92 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: CI/CD No Productivo - apicifradocicdeafit-noprod
+
+on:
+  push:
+    branches:
+      - integracion
+  workflow_dispatch:
+
+
+
+jobs:
+  sast:
+    name: Ejecutar Análisis SAST con Bandit
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout del código
+      uses: actions/checkout@v2
+    - name: Configurar entorno de Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Instalar Bandit
+      run: pip install bandit
+    - name: Ejecutar análisis SAST con Bandit
+      run: bandit -r .  # Escanea todo el código en el directorio actual
+    - name: Subir resultados como artefactos
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: bandit-report
+        path: bandit.json
+        
+  build:
+      
+      runs-on: windows-latest
+      needs: sast
+      steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.x'
+          include-prerelease: true
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
+  deploy:
+      runs-on: windows-latest
+      needs: build
+      environment:
+          name: 'No Productivo'
+          url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+      steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: .net-app
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'apicifradocicdeafit-noprod'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8DD24FE62B2D4E3A8650CB86074AD750 }}
+          package: .
+  dast:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.7.0
+        with:
+          target: 'https://apicifradocicdeafit-noprod.azurewebsites.net/'
+          fail_action: false
+          allow_issue_writing: false
+          cmd_options: '-a'
