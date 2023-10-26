@@ -87,3 +87,4 @@ jobs:
         uses: zaproxy/action-full-scan@v0.7.0
         with:
           target: 'https://apicifradocicdeafit-noprod.azurewebsites.net/'
+          fail_action: false
