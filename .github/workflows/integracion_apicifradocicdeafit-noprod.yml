@@ -9,11 +9,39 @@ on:
       - integracion
   workflow_dispatch:
 
+
+
 jobs:
-  build:
-    runs-on: windows-latest
+  sast:
+    name: Ejecutar Análisis SAST con Bandit
+    runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout del código
+      uses: actions/checkout@v2
+
+    - name: Configurar entorno de Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Instalar Bandit
+      run: pip install bandit
+
+    - name: Ejecutar análisis SAST con Bandit
+      run: bandit -r .  # Escanea todo el código en el directorio actual
+
+    - name: Subir resultados como artefactos
+      if: ${{ failure() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name: bandit-report
+        path: bandit.json
+        
+  build:
+      runs-on: windows-latest
+
+      steps:
       - uses: actions/checkout@v4
 
       - name: Set up .NET Core
@@ -35,13 +63,13 @@ jobs:
           path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
-    runs-on: windows-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      runs-on: windows-latest
+      needs: build
+      environment:
+          name: 'Production'
+          url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
-    steps:
+      steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
