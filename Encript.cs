@@ -37,7 +37,7 @@ namespace Encript
         /// <param name="_cadenaAdesencriptar"></param>
         /// <returns></returns>
         /// 
-        public static String palabraClave = "sIi4p5ts31s_5rd0ctS3";
+        public static String palabraClave = "";
 
         public static string DesEncriptarBase64(this string _cadenaAdesencriptar)
         {
