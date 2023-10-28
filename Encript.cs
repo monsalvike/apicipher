@@ -9,7 +9,7 @@ namespace Encript
 
 
 
-    
+
     /// <summary>
     ///
     /// </summary>
@@ -37,11 +37,12 @@ namespace Encript
         /// <param name="_cadenaAdesencriptar"></param>
         /// <returns></returns>
         /// 
+        public static String palabraClave = "";
+
         public static string DesEncriptarBase64(this string _cadenaAdesencriptar)
         {
             string result = string.Empty;
             byte[] decryted = Convert.FromBase64String(_cadenaAdesencriptar);
-            //result = System.Text.Encoding.Unicode.GetString(decryted, 0, decryted.ToArray().Length);
             result = System.Text.Encoding.Unicode.GetString(decryted);
             return result;
         }
@@ -56,15 +57,10 @@ namespace Encript
             {
                 return null;
             }
-            // Get the bytes of the string
             var bytesToBeEncrypted = Encoding.UTF8.GetBytes(plainText);
-            var passwordBytes = Encoding.UTF8.GetBytes("sIi4p5ts31s_5rd0ctS3");
-
-            // Hash the password with SHA256
+            var passwordBytes = Encoding.UTF8.GetBytes(palabraClave);
             passwordBytes = SHA512.Create().ComputeHash(passwordBytes);
-
             var bytesEncrypted = Encrypt(bytesToBeEncrypted, passwordBytes);
-
             return Convert.ToBase64String(bytesEncrypted);
         }
 
@@ -83,9 +79,8 @@ namespace Encript
                 {
                     return null;
                 }
-                // Get the bytes of the string
                 var bytesToBeDecrypted = Convert.FromBase64String(encryptedText);
-                var passwordBytes = Encoding.UTF8.GetBytes("sIi4p5ts31s_5rd0ctS3");
+                var passwordBytes = Encoding.UTF8.GetBytes(palabraClave);
 
                 passwordBytes = SHA512.Create().ComputeHash(passwordBytes);
 
@@ -102,9 +97,8 @@ namespace Encript
 
         private static byte[] Encrypt(byte[] bytesToBeEncrypted, byte[] passwordBytes)
         {
-            var saltBytes = Encoding.UTF8.GetBytes("sIi4p5ts31s_5rd0ctS3".Substring(0, 8));
+            var saltBytes = Encoding.UTF8.GetBytes(palabraClave.Substring(0, 8));
             byte[] encryptedBytes = null;
-            //var saltBytes = new byte[] { 16, 6, 11, 19, 3,36, 21, 44};
 
             using (MemoryStream ms = new MemoryStream())
             {
@@ -135,8 +129,7 @@ namespace Encript
         private static byte[] Decrypt(byte[] bytesToBeDecrypted, byte[] passwordBytes)
         {
             byte[] decryptedBytes = null;
-            //var saltBytes = new byte[] { 16, 6, 11, 19, 3, 36, 21, 44 };
-            var saltBytes = Encoding.UTF8.GetBytes("sIi4p5ts31s_5rd0ctS3".Substring(0, 8));
+            var saltBytes = Encoding.UTF8.GetBytes(palabraClave.Substring(0, 8));
             using (MemoryStream ms = new MemoryStream())
             {
                 using (RijndaelManaged AES = new RijndaelManaged())

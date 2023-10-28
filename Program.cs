@@ -20,7 +20,7 @@ app.UseHttpsRedirection();
 
 app.MapPost("/encrypt",  ([FromBody] string cadena)  =>
 {
-     // Realiza la operación deseada con el parámetro
+     // Realiza la operación deseada con el parámetro.
     string cadenaEncriptada = Encript.EncriptadorClave.Encriptar(cadena);
 
     // Devuelve la salida de la operación
@@ -31,7 +31,7 @@ app.MapPost("/encrypt",  ([FromBody] string cadena)  =>
 
 app.MapPost("/decrypt",  ([FromBody] string cadenacifrada)  =>
 {
-     // Realiza la operación deseada con el parámetro
+     // Realiza la operación deseada con el parámetro.
     string cadenaDecifrada = Encript.EncriptadorClave.DesEncriptar(cadenacifrada);
 
     // Devuelve la salida de la operación
@@ -39,5 +39,6 @@ app.MapPost("/decrypt",  ([FromBody] string cadenacifrada)  =>
 })
 .WithName("decrypt")
 .WithOpenApi();
+
 app.Run();
 
