@@ -11,5 +11,7 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0-rc.2.23480.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
-
+<ItemGroup>
+  <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="3.3.0" PrivateAssets="all" />
+</ItemGroup>
 </Project>
