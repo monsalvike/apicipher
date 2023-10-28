@@ -19,7 +19,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '7.0.13' # Selecciona la versión de .NET
+          dotnet-version: '8.0' # Selecciona la versión de .NET
       - name: Restore Dependencies
         run: dotnet restore
       - name: Run Code Analysis
