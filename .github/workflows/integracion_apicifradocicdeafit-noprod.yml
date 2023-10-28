@@ -23,7 +23,7 @@ jobs:
       - name: Restore Dependencies
         run: dotnet restore
       - name: Run Code Analysis
-        run: dotnet build /p:ReportAnalyzers=true
+        run: dotnet build /p:ReportAnalyzers=false
   sast:
     name: Ejecutar Análisis SAST con Bandit
     runs-on: ubuntu-latest
