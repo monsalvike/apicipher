@@ -20,6 +20,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.x' # Selecciona la versión de .NET
+          include-prerelease: true
       - name: Restore Dependencies
         run: dotnet restore
       - name: Run Code Analysis
